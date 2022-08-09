@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category List</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" >
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <script defer th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script defer th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+
+<nav th:insert="fragment/nav :: nav_fragment"></nav>
+
+
+<!-- HEADER -->
+<header class="my-4 py-4 bg-info text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>
+                    <i class="fas fa-folder"></i> <span th:text="#{lbl.category}"></span> </h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<section id="categories">
+    <div class="container">
+        <!-- CONTENT -->
+        <div class="row">
+            <div class="col-md-9">
+
+                <div th:if="${message}" th:text="${message}" th:class="${alertClass}"></div>
+
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h4><span th:text="#{categories.header}"></span></h4>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th th:text="#{lbl.name}"></th>
+                            <th th:text="#{lbl.date}"></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:if="${categoryViews == null || categoryViews.isEmpty()}">
+                            <td colspan="4">No Records Available</td>
+                        </tr>
+                        <tr th:unless="${categoryViews == null || categoryViews.isEmpty()}" th:each="categoryView : ${categoryViews}">
+                            <td th:text="${categoryView.id}"></td>
+                            <td th:text="${#strings.capitalize(categoryView.name)}"></td>
+                            <td th:text="${categoryView.createDate}"></td>
+                            <td>
+                                <div class="row">
+                                    <a th:href="@{/category/view/{id} (id=${categoryView.id})}" class="btn btn-primary ml-2">
+                                        <i class="fas fa-angle-double-right"></i> <span th:text="#{lbl.details}"></span>
+                                    </a>
+
+                                    <form th:action="@{/category/view}" method="post">
+                                        <input type="hidden" th:value="${categoryView.id}" th:attr="name='id'">
+                                        <button type="submit" class="btn btn-primary ml-2"><span th:text="#{lbl.details}"></span></button>
+                                    </form>
+
+                                    <a th:href="@{/category/delete/{id} (id=${categoryView.id})}" class="btn btn-danger ml-2">
+                                        <i class="fas fa-times"></i> <span th:text="#{lbl.delete}"></span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center bg-success text-white mb-3">
+                    <div class="card-body">
+                        <h3><span th:text="#{categories.header}"></span></h3>
+                        <h4 class="display-4">
+                            <i class="fas fa-folder"></i> <span th:text="${categoryViewsSize}"></span></span>
+                        </h4>
+                        <a th:href="@{/category/form}" class="btn btn-outline-light btn-sm"><span th:text="#{btn.add}"></span> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer th:replace="fragment/footer :: footer_fragment">
+</footer>
+
+</body>
+</html>
